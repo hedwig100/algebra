@@ -79,7 +79,6 @@ where
                 false => continue,
                 true => {
                     let rhs = rhs.mul(&mono.div(&rhs.monos[0]));
-                    eprintln!("{:?}", rhs);
                     *self = (*self).sub(&rhs);
                     return true;
                 }
