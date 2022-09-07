@@ -1,11 +1,11 @@
 use super::field;
 use super::gcd;
 
-use core::ops::{Add, Div, Mul, Sub};
 use field::Field;
 use std::fmt::Debug;
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Fp<const P: i32> {
     val: i32,
 }
@@ -54,6 +54,15 @@ impl<const P: i32> Div for Fp<P> {
     }
 }
 
+impl<const P: i32> Neg for Fp<P> {
+    type Output = Self;
+    fn neg(self) -> Self::Output {
+        Fp::<P> {
+            val: (P - self.val) % P,
+        }
+    }
+}
+
 impl<const P: i32> Field for Fp<P> {
     fn unit() -> Fp<P> {
         Fp::<P> { val: 1 }
@@ -63,16 +72,21 @@ impl<const P: i32> Field for Fp<P> {
     }
 }
 
-#[test]
-fn fp_test() {
-    let x = Fp::<7>::new(2);
-    let y = Fp::<7>::new(10);
-    let add = x + y;
-    assert_eq!(add.val, 5);
-    let minus = x - y;
-    assert_eq!(minus.val, 6);
-    let mul = x * y;
-    assert_eq!(mul.val, 6);
-    let div = x / y;
-    assert_eq!(div.val, 3);
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn fp_test() {
+        let x = Fp::<7>::new(2);
+        let y = Fp::<7>::new(10);
+        let add = x + y;
+        assert_eq!(add.val, 5);
+        let minus = x - y;
+        assert_eq!(minus.val, 6);
+        let mul = x * y;
+        assert_eq!(mul.val, 6);
+        let div = x / y;
+        assert_eq!(div.val, 3);
+    }
 }
