@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 
 use crate::algebra::field;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Debug)]
 pub struct Monomial<F, const N: usize>
 where
     F: field::Field,
@@ -19,6 +19,26 @@ where
         Monomial { coef, degree }
     }
 
+    pub fn is_zero(&self) -> bool {
+        self.coef == F::zero()
+    }
+
+    pub fn neg(&self) -> Monomial<F, N> {
+        Monomial {
+            coef: -self.coef,
+            degree: self.degree,
+        }
+    }
+
+    // sub
+    // 単項式を引く, ただし次数が同じ場合であるのみ呼べる.
+    pub fn sub(&self, rhs: &Monomial<F, N>) -> Monomial<F, N> {
+        Monomial {
+            coef: self.coef - rhs.coef,
+            degree: self.degree,
+        }
+    }
+
     pub fn can_divide(&self, rhs: &Monomial<F, N>) -> bool {
         for i in 0..N {
             if self.degree[i] < rhs.degree[i] {
@@ -28,16 +48,9 @@ where
         return true;
     }
 
-    pub fn minus(&self, rhs: &Monomial<F, N>) -> Monomial<F, N> {
-        Monomial {
-            coef: self.coef - rhs.coef,
-            degree: self.degree,
-        }
-    }
-
-    // divide
-    // rhsで割る, ただし割ることを確認してから呼ぶこと
-    pub fn divide(&self, rhs: &Monomial<F, N>) -> Monomial<F, N> {
+    // div
+    // rhsで割る, ただし割れることを確認してから呼ぶこと
+    pub fn div(&self, rhs: &Monomial<F, N>) -> Monomial<F, N> {
         let coef = self.coef / rhs.coef;
         let mut degree = [0; N];
         for (j, deg) in degree.iter_mut().enumerate() {
