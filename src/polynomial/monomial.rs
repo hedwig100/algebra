@@ -2,6 +2,8 @@ use std::cmp::Ordering;
 
 use crate::algebra::field;
 
+// Monomial
+// 係数体をFとしてN変数の単項式を表す構造体, ここでは係数を含めて単項式と呼ぶことにする.
 #[derive(Clone, Debug)]
 pub struct Monomial<F, const N: usize>
 where
@@ -23,6 +25,8 @@ where
         self.coef == F::zero()
     }
 
+    // neg
+    // -selfを返す.
     pub fn neg(&self) -> Monomial<F, N> {
         Monomial {
             coef: -self.coef,
@@ -64,6 +68,9 @@ impl<F, const N: usize> PartialEq for Monomial<F, N>
 where
     F: field::Field,
 {
+    // eq
+    // 次数が等しい時に等しいと判定している.
+    // 係数は等しくなくても等しいと判定されることに注意する.
     fn eq(&self, other: &Self) -> bool {
         for i in 0..N {
             if self.degree[i] != other.degree[i] {
@@ -80,6 +87,8 @@ impl<F, const N: usize> PartialOrd for Monomial<F, N>
 where
     F: field::Field,
 {
+    // partial_cmp
+    // 辞書順で単項式を比較する.
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         for i in 0..N {
             match self.degree[i].cmp(&other.degree[i]) {

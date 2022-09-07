@@ -1,6 +1,10 @@
 use super::monomial::Monomial;
 use crate::algebra::field;
 
+// Polynomial
+// 係数体をFとしてN変数の多項式を表す構造体.
+// monosは単項式の順序を保つ, すなわち単項式順序で大きいものから並ぶ.
+// すべての演算の結果は単項式の順序を保つようなものではなくてはならない.
 #[derive(Debug)]
 pub struct Polynomial<F, const N: usize>
 where
@@ -15,10 +19,6 @@ where
 {
     pub fn new(monos: Vec<Monomial<F, N>>) -> Polynomial<F, N> {
         Polynomial { monos }
-    }
-
-    pub fn is_zero(&self) -> bool {
-        self.monos.is_empty()
     }
 
     // sub
