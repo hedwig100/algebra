@@ -104,3 +104,30 @@ where
         true
     }
 }
+
+// simplify
+// 多項式polyを多項式の集合polysで簡約化する.
+// もし簡約化できなければfalseとpolyをそのまま返す, 簡約化できれば簡約化したものを返す.
+// polyをpolysで簡約化するとは, polyをpolysに含まれる多項式で簡約化し, 任意の項がpolysに含まれる任意の多項式の
+// 先頭多項式で割り切れないようにすることをいう.
+pub fn simplify<F, const N: usize>(
+    mut poly: Polynomial<F, N>,
+    polys: &[Polynomial<F, N>],
+) -> (bool, Polynomial<F, N>)
+where
+    F: field::Field,
+{
+    let mut simplifed_once = false;
+    let mut is_simplified = true;
+    while is_simplified {
+        is_simplified = false;
+        for rhs in polys.iter() {
+            is_simplified |= poly.simplify(rhs);
+            if is_simplified {
+                simplifed_once = true;
+                break;
+            }
+        }
+    }
+    (simplifed_once, poly)
+}
