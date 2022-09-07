@@ -1,3 +1,4 @@
+use std::cmp::max;
 use std::cmp::Ordering;
 
 use crate::algebra::field;
@@ -98,4 +99,15 @@ where
         }
         Some(Ordering::Equal)
     }
+}
+
+pub fn lcm<F, const N: usize>(mono1: &Monomial<F, N>, mono2: &Monomial<F, N>) -> Monomial<F, N>
+where
+    F: field::Field,
+{
+    let mut degree = [0; N];
+    for i in 0..N {
+        degree[i] = max(mono1.degree[i], mono2.degree[i]);
+    }
+    Monomial::new(mono1.coef * mono2.coef, degree)
 }

@@ -21,6 +21,10 @@ where
         Polynomial { monos }
     }
 
+    pub fn is_zero(&self) -> bool {
+        self.monos.is_empty()
+    }
+
     // sub
     // rhsを引いた結果を返す.
     pub fn sub(&self, rhs: &Polynomial<F, N>) -> Polynomial<F, N> {
@@ -71,7 +75,7 @@ where
     // simplify
     // 多項式を多項式で簡約化する. 簡約化できた場合はtrueを返し, 簡約化できない場合はfalseを返す.
     pub fn simplify(&mut self, rhs: &Polynomial<F, N>) -> bool {
-        if rhs.monos.is_empty() {
+        if rhs.is_zero() {
             return false;
         }
         for mono in self.monos.iter() {
