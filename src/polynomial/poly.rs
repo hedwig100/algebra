@@ -5,7 +5,7 @@ use crate::algebra::field;
 // 係数体をFとしてN変数の多項式を表す構造体.
 // monosは単項式の順序を保つ, すなわち単項式順序で大きいものから並ぶ.
 // すべての演算の結果は単項式の順序を保つようなものではなくてはならない.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Polynomial<F, const N: usize>
 where
     F: field::Field,
