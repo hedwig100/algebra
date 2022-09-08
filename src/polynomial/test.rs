@@ -1,4 +1,8 @@
-use super::{monomial::Monomial, poly::Polynomial};
+use super::{
+    monomial::lcm,
+    monomial::Monomial,
+    poly::{simplify, Polynomial},
+};
 use crate::algebra::fp;
 
 type Fp = fp::Fp<7>;
@@ -13,6 +17,13 @@ fn monomial() {
 
     let mono3 = Monomial::new(Fp::new(8), [2, 3, 3]);
     assert_eq!(mono1.sub(&mono3), Monomial::new(Fp::new(2), [2, 3, 3]));
+}
+
+#[test]
+fn lcm_test() {
+    let mono1 = Monomial::new(Fp::new(3), [0, 1, 2]);
+    let mono2 = Monomial::new(Fp::new(2), [1, 2, 2]);
+    assert_eq!(lcm(&mono1, &mono2), Monomial::new(Fp::new(6), [1, 2, 2]));
 }
 
 #[test]
@@ -53,4 +64,24 @@ fn polynomial() {
             Monomial::new(Fp::new(1), [0, 1, 5])
         ])
     )
+}
+
+#[test]
+fn poly_simp() {
+    let poly = Polynomial::new(vec![
+        Monomial::new(Fp::new(2), [2, 1]),
+        Monomial::new(Fp::new(3), [1, 1]),
+        Monomial::new(Fp::new(3), [1, 0]),
+        Monomial::new(Fp::new(4), [0, 0]),
+    ]);
+    let polys = vec![Polynomial::new(vec![Monomial::new(Fp::new(1), [1, 1])])];
+    let (is_simplified, poly) = simplify(poly, &polys);
+    assert!(is_simplified);
+    assert_eq!(
+        poly,
+        Polynomial::new(vec![
+            Monomial::new(Fp::new(3), [1, 0]),
+            Monomial::new(Fp::new(4), [0, 0])
+        ])
+    );
 }

@@ -106,8 +106,8 @@ where
     F: field::Field,
 {
     let mut degree = [0; N];
-    for i in 0..N {
-        degree[i] = max(mono1.degree[i], mono2.degree[i]);
+    for (i, deg) in degree.iter_mut().enumerate() {
+        *deg = max(mono1.degree[i], mono2.degree[i]);
     }
     Monomial::new(mono1.coef * mono2.coef, degree)
 }
