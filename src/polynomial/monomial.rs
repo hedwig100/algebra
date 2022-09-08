@@ -1,5 +1,6 @@
 use std::cmp::max;
 use std::cmp::Ordering;
+use std::fmt;
 
 use crate::algebra::field;
 
@@ -98,6 +99,24 @@ where
             }
         }
         Some(Ordering::Equal)
+    }
+}
+
+impl<F, const N: usize> fmt::Display for Monomial<F, N>
+where
+    F: field::Field + fmt::Display,
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}{}",
+            self.coef,
+            self.degree
+                .iter()
+                .enumerate()
+                .map(|(i, deg)| format!("x{}^{}", i + 1, deg))
+                .collect::<String>()
+        )
     }
 }
 

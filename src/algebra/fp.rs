@@ -1,6 +1,7 @@
 use super::field;
 use super::gcd;
 
+use core::fmt;
 use field::Field;
 use std::fmt::Debug;
 use std::ops::{Add, Div, Mul, Neg, Sub};
@@ -69,6 +70,12 @@ impl<const P: i32> Field for Fp<P> {
     }
     fn zero() -> Fp<P> {
         Fp::<P> { val: 0 }
+    }
+}
+
+impl<const P: i32> fmt::Display for Fp<P> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.val)
     }
 }
 

@@ -1,5 +1,6 @@
 use super::monomial::Monomial;
 use crate::algebra::field;
+use std::fmt;
 
 // Polynomial
 // 係数体をFとしてN変数の多項式を表す構造体.
@@ -106,6 +107,23 @@ where
             }
         }
         true
+    }
+}
+
+impl<F, const N: usize> fmt::Display for Polynomial<F, N>
+where
+    F: field::Field + fmt::Display,
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            self.monos
+                .iter()
+                .map(|mono| format!("{}", mono))
+                .collect::<Vec<String>>()
+                .join("+")
+        )
     }
 }
 
