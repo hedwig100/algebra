@@ -73,6 +73,16 @@ where
         Polynomial { monos }
     }
 
+    pub fn norm(&mut self) {
+        if self.monos[0].coef == F::unit() || self.monos[0].coef == F::zero() {
+            return;
+        }
+        let lc = self.monos[0].coef;
+        for mono in self.monos.iter_mut() {
+            (*mono).coef = (*mono).coef / lc;
+        }
+    }
+
     // simplify
     // 多項式を多項式で簡約化する. 簡約化できた場合はtrueを返し, 簡約化できない場合はfalseを返す.
     pub fn simplify(&mut self, rhs: &Polynomial<F, N>) -> bool {

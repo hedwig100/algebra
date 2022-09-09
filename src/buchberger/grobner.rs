@@ -58,7 +58,10 @@ where
         .into_iter()
         .enumerate()
         .filter(|&(i, _)| pick_index.binary_search(&i).is_ok())
-        .map(|(_, poly)| poly)
+        .map(|(_, mut poly)| {
+            poly.norm();
+            poly
+        })
         .collect()
 }
 
