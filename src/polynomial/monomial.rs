@@ -107,16 +107,18 @@ where
     F: field::Field + fmt::Display,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "{}{}",
-            self.coef,
-            self.degree
-                .iter()
-                .enumerate()
-                .map(|(i, deg)| format!("x_{}^{}", i + 1, deg))
-                .collect::<String>()
-        )
+        let deg = self
+            .degree
+            .iter()
+            .enumerate()
+            .filter(|(_, deg)| **deg != 0)
+            .map(|(i, deg)| format!("x_{}^{}", i + 1, deg))
+            .collect::<String>();
+        if !deg.is_empty() && self.coef == F::unit() {
+            write!(f, "{}", deg)
+        } else {
+            write!(f, "{}{}", self.coef, deg)
+        }
     }
 }
 
