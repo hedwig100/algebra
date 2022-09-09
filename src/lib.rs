@@ -1,4 +1,4 @@
 pub mod algebra;
 pub mod buchberger;
-pub mod parser;
+pub mod equation_parser;
 pub mod polynomial;

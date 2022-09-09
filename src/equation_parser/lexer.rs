@@ -14,7 +14,7 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    pub fn lex(&mut self) -> Result<Vec<Token>, String> {
+    pub fn lex(&mut self) -> Result<Vec<Token>, &'static str> {
         let mut ans = Vec::new();
         let mut num = 0;
         while let Some(c) = self.cursor.next() {
@@ -22,6 +22,7 @@ impl<'a> Lexer<'a> {
                 Ok(Token::Num(a)) => {
                     num = num * 10 + a;
                 }
+                Ok(Token::Symb(' ')) => continue,
                 Ok(tok) => {
                     self.add_num(&mut ans, &mut num);
                     ans.push(tok);
@@ -32,11 +33,12 @@ impl<'a> Lexer<'a> {
                 }
             }
         }
+        self.add_num(&mut ans, &mut num);
         ans.push(Token::EOF);
         Ok(ans)
     }
 
-    fn lex_char(&mut self, c: char) -> Result<Token, String> {
+    fn lex_char(&mut self, c: char) -> Result<Token, &'static str> {
         match c {
             '0' => Ok(Token::Num(0)),
             '1' => Ok(Token::Num(1)),
@@ -49,12 +51,13 @@ impl<'a> Lexer<'a> {
             '8' => Ok(Token::Num(8)),
             '9' => Ok(Token::Num(9)),
             'x' => Ok(Token::Var('x')),
-            '_' => Ok(Token::Op('_')),
-            '^' => Ok(Token::Op('^')),
-            '+' => Ok(Token::Op('+')),
-            '-' => Ok(Token::Op('-')),
-            ',' => Ok(Token::Symbol(',')),
-            other => Err(format!("unexpected character '{}'", other)),
+            '^' => Ok(Token::Symb('^')),
+            '+' => Ok(Token::Symb('+')),
+            '-' => Ok(Token::Symb('-')),
+            '_' => Ok(Token::Symb('_')),
+            ',' => Ok(Token::Symb(',')),
+            ' ' => Ok(Token::Symb(' ')),
+            _ => Err("unexpected character"),
         }
     }
 
