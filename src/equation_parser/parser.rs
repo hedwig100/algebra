@@ -53,14 +53,25 @@ impl Parser {
         &mut self,
     ) -> Result<Polynomial<fp::Fp<P>, N>, &'static str> {
         let mut monos = Vec::new();
+        let mut minus = false;
         loop {
             match self.term() {
-                Ok(ter) => monos.push(ter),
+                Ok(ter) => {
+                    if minus {
+                        minus = false;
+                        monos.push(ter.neg());
+                    } else {
+                        monos.push(ter);
+                    }
+                }
                 Err(msg) => return Err(msg),
             };
             match self.read() {
                 Some(Token::Symb('+')) => self.next(),
-                Some(Token::Symb('-')) => self.next(),
+                Some(Token::Symb('-')) => {
+                    minus = true;
+                    self.next()
+                }
                 _ => break,
             };
         }

@@ -114,7 +114,7 @@ where
             self.degree
                 .iter()
                 .enumerate()
-                .map(|(i, deg)| format!("x{}^{}", i + 1, deg))
+                .map(|(i, deg)| format!("x_{}^{}", i + 1, deg))
                 .collect::<String>()
         )
     }
